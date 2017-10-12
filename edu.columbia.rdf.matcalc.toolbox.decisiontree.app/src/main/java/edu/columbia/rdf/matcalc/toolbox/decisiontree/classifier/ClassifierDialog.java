@@ -163,7 +163,7 @@ public class ClassifierDialog extends ModernDialogTaskWindow implements ModernCl
 		box.add(UI.createVGap(5));
 		box.add(new HBox(new ModernLabel("Distance metric", 150), mDistanceCombo));
 		
-		setCardContent(box);
+		setDialogCardContent(box);
 		
 		mDistanceCombo.setSelectedIndex(3);
 	}

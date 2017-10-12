@@ -8,8 +8,8 @@ import org.jebtk.core.NameProperty;
 import org.jebtk.core.collections.CollectionUtils;
 import org.jebtk.core.xml.XmlRepresentation;
 import org.jebtk.graphplot.figure.series.XYSeries;
-import org.jebtk.math.matrix.AnnotatableMatrix;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.matrix.MatrixGroup;
 import org.jebtk.math.matrix.utils.MatrixOperations;
 import org.w3c.dom.Document;
@@ -17,15 +17,15 @@ import org.w3c.dom.Element;
 
 public class Classifier implements Comparable<Classifier>, Iterable<String>, NameProperty, XmlRepresentation {
 	private String mName;
-	private AnnotationMatrix mPhenM;
-	private AnnotationMatrix mControlM;
+	private DataFrame mPhenM;
+	private DataFrame mControlM;
 	private Map<String, Integer> mGeneMap;
 	private String mPhenotype;
 	private String mControl;
 	private List<String> mGenes;
 
 	public Classifier(String name, 
-			AnnotationMatrix m, 
+			DataFrame m, 
 			XYSeries phenotypeGroup, 
 			XYSeries controlGroup,
 			String annotation) {
@@ -44,10 +44,10 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
 		
 		mGeneMap = CollectionUtils.toIndexMap(mGenes);
 		
-		mPhenM = AnnotatableMatrix.createNumericalMatrix(mGenes.size(), 
+		mPhenM = DataFrame.createNumericalMatrix(mGenes.size(), 
 				phenotypeIndices.size());
 		
-		mControlM = AnnotatableMatrix.createNumericalMatrix(mGenes.size(), 
+		mControlM = DataFrame.createNumericalMatrix(mGenes.size(), 
 				controlIndices.size());
 		
 		int c = 0;
@@ -65,9 +65,9 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
 	
 	public Classifier(String name, 
 			String phenotype,
-			AnnotationMatrix phenM,
+			DataFrame phenM,
 			String control,
-			AnnotationMatrix controlM,
+			DataFrame controlM,
 			List<String> genes) {
 		mName = name;
 		
@@ -105,7 +105,7 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
 		return MatrixOperations.mean(mPhenM, mGeneMap.get(gene));
 	}
 	
-	public AnnotationMatrix getPhenotype() {
+	public DataFrame getPhenotype() {
 		return mPhenM;
 	}
 	
@@ -117,7 +117,7 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
 		return MatrixOperations.mean(mControlM, mGeneMap.get(gene));
 	}
 
-	public AnnotationMatrix getControl() {
+	public DataFrame getControl() {
 		return mControlM;
 	}
 	
@@ -146,7 +146,7 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
 	}
 	
 	public static Classifier create(String name,
-			AnnotationMatrix m, 
+			DataFrame m, 
 			XYSeries phenotypeGroup, 
 			XYSeries controlGroup,
 			String annotation) {
@@ -159,9 +159,9 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
 	
 	public static Classifier create(String name, 
 			String phenotype,
-			AnnotationMatrix phenM,
+			DataFrame phenM,
 			String control,
-			AnnotationMatrix controlM,
+			DataFrame controlM,
 			List<String> genes) {
 		return new Classifier(name,
 				phenotype,

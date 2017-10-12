@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jebtk.core.text.Parser;
-import org.jebtk.math.matrix.AnnotatableMatrix;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.math.matrix.DataFrame;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -18,8 +18,8 @@ public class ClassifierXmlHandler extends DefaultHandler {
 	private int mPhenSize;
 	private int mControlSize;
 	private int mSize;
-	private AnnotationMatrix mControlM;
-	private AnnotationMatrix mPhenM;
+	private DataFrame mControlM;
+	private DataFrame mPhenM;
 	private String mGene;
 	private List<String> mGenes = new ArrayList<String>();
 	private boolean mPhenMode;
@@ -60,8 +60,8 @@ public class ClassifierXmlHandler extends DefaultHandler {
 				e.printStackTrace();
 			}
 
-			mPhenM = AnnotatableMatrix.createNumericalMatrix(mSize, mPhenSize);
-			mControlM = AnnotatableMatrix.createNumericalMatrix(mSize, mControlSize);
+			mPhenM = DataFrame.createNumericalMatrix(mSize, mPhenSize);
+			mControlM = DataFrame.createNumericalMatrix(mSize, mControlSize);
 			mGenes = new ArrayList<String>();
 		} else if (qName.equals("gene")) {
 			mGene = attributes.getValue("name");

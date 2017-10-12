@@ -5,7 +5,7 @@ import javax.swing.Box;
 import org.jebtk.core.text.TextUtils;
 import org.jebtk.graphplot.figure.series.XYSeries;
 import org.jebtk.graphplot.figure.series.XYSeriesGroup;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.dialog.ModernDialogTaskWindow;
 import org.jebtk.modern.dialog.ModernMessageDialog;
@@ -35,10 +35,10 @@ public class AddClassifierDialog extends ModernDialogTaskWindow {
 
 	private MatrixRowAnnotationCombo mHeaderCombo;
 
-	private AnnotationMatrix mM;
+	private DataFrame mM;
 
 
-	public AddClassifierDialog(MainMatCalcWindow parent, AnnotationMatrix m) {
+	public AddClassifierDialog(MainMatCalcWindow parent, DataFrame m) {
 		super(parent);
 
 		mM = m;

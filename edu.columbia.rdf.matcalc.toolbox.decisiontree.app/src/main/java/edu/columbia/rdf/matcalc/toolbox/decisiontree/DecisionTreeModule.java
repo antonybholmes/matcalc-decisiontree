@@ -50,8 +50,8 @@ import org.jebtk.graphplot.icons.ShapeStyle;
 import org.jebtk.math.Linspace;
 import org.jebtk.math.machine.learning.C45;
 import org.jebtk.math.machine.learning.DecisionTree;
-import org.jebtk.math.matrix.AnnotatableMatrix;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.matrix.MatrixGroup;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.dialog.ModernMessageDialog;
@@ -127,8 +127,8 @@ public class DecisionTreeModule extends CalcModule {
 		mWindow = window;
 
 		// home
-		mWindow.getRibbon().getToolbar("Statistics").getSection("Classifier").add(mClassifyButton);
-		mWindow.getRibbon().getToolbar("Statistics").getSection("Classifier").add(mAddButton);
+		mWindow.getRibbon().getToolbar("Classification").getSection("Decision Tree").add(mClassifyButton);
+		mWindow.getRibbon().getToolbar("Classification").getSection("Decision Tree").add(mAddButton);
 		//mWindow.getRibbon().getToolbar("Statistics").getSection("Classifier").add(mExportButton);
 
 		mClassifyButton.addClickListener(new ModernClickListener() {
@@ -168,14 +168,14 @@ public class DecisionTreeModule extends CalcModule {
 			return;
 		}
 
-		AnnotationMatrix m = mWindow.getCurrentMatrix();
+		DataFrame m = mWindow.getCurrentMatrix();
 
 		DecisionTree tree = dialog.getDecisionTree();
 
 		double[] values;
 		
-		AnnotationMatrix resultsM = 
-				AnnotatableMatrix.createNumericalMatrix(m.getColumnCount(), 1);
+		DataFrame resultsM = 
+				DataFrame.createNumericalMatrix(m.getColumnCount(), 1);
 
 		for (int queryColumn = 0; queryColumn < m.getColumnCount(); ++queryColumn) {
 			// Score each sample in the query set
@@ -193,11 +193,11 @@ public class DecisionTreeModule extends CalcModule {
 		//plot(m, mWindow.getGroups(), classifiers, resultsM, summaries);
 	}
 
-	private void plot(AnnotationMatrix m,
+	private void plot(DataFrame m,
 			XYSeriesGroup groups,
 			List<Classifier> classifiers,
-			AnnotationMatrix resultsM,
-			List<AnnotationMatrix> summaries) {
+			DataFrame resultsM,
+			List<DataFrame> summaries) {
 
 		// We need to create some series for each classifier
 
@@ -216,7 +216,7 @@ public class DecisionTreeModule extends CalcModule {
 		for (int ci = 0; ci < classifiers.size(); ++ci) {
 			//Classifier classifier = classifiers.get(ci);
 
-			AnnotationMatrix summaryM = summaries.get(ci);
+			DataFrame summaryM = summaries.get(ci);
 
 			//
 			// Summary
@@ -248,8 +248,8 @@ public class DecisionTreeModule extends CalcModule {
 
 				List<Integer> indices = MatrixGroup.findColumnIndices(m, g);
 
-				AnnotationMatrix cm = 
-						AnnotatableMatrix.createNumericalMatrix(indices.size(), 1);
+				DataFrame cm = 
+						DataFrame.createNumericalMatrix(indices.size(), 1);
 
 				for (int i = 0; i < indices.size(); ++i) {
 					double v = resultsM.getValue(indices.get(i), ci);
@@ -339,7 +339,7 @@ public class DecisionTreeModule extends CalcModule {
 			return;
 		}
 
-		AnnotationMatrix m = mWindow.getCurrentMatrix();
+		DataFrame m = mWindow.getCurrentMatrix();
 
 		AddClassifierDialog dialog = new AddClassifierDialog(mWindow, m);
 
