@@ -176,9 +176,9 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
 		Element e = doc.createElement("classifier");
 		e.setAttribute("name", mName);
 		e.setAttribute("phenotype", mPhenotype);
-		e.setAttribute("phenotype-size", Integer.toString(mPhenM.getColumnCount()));
+		e.setAttribute("phenotype-size", Integer.toString(mPhenM.getCols()));
 		e.setAttribute("control", mControl);
-		e.setAttribute("control-size", Integer.toString(mControlM.getColumnCount()));
+		e.setAttribute("control-size", Integer.toString(mControlM.getCols()));
 		e.setAttribute("size", Integer.toString(mGenes.size()));
 		
 		//XmlElement gse = new XmlElement("genes");
@@ -192,7 +192,7 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
 			
 			ge.appendChild(pe);
 			
-			for (int i = 0; i < mPhenM.getColumnCount(); ++i) {
+			for (int i = 0; i < mPhenM.getCols(); ++i) {
 				Element se = doc.createElement("sample");
 				//se.setAttribute("name", mPhenM.getColumnName(i));
 				se.setAttribute("value", mPhenM.getText(mGeneMap.get(name), i));
@@ -203,7 +203,7 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
 			
 			ge.appendChild(ce);
 			
-			for (int i = 0; i < mControlM.getColumnCount(); ++i) {
+			for (int i = 0; i < mControlM.getCols(); ++i) {
 				Element se = doc.createElement("sample");
 				//se.setAttribute("name", mControlM.getColumnName(i));
 				se.setAttribute("value", mControlM.getText(mGeneMap.get(name), i));

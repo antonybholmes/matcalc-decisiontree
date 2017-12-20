@@ -175,12 +175,12 @@ public class DecisionTreeModule extends CalcModule {
 		double[] values;
 		
 		DataFrame resultsM = 
-				DataFrame.createNumericalMatrix(m.getColumnCount(), 1);
+				DataFrame.createNumericalMatrix(m.getCols(), 1);
 
-		for (int queryColumn = 0; queryColumn < m.getColumnCount(); ++queryColumn) {
+		for (int queryColumn = 0; queryColumn < m.getCols(); ++queryColumn) {
 			// Score each sample in the query set
 			
-			values = m.columnAsDouble(queryColumn);
+			values = m.columnToDoubleArray(queryColumn);
 			
 			String classification = tree.classify(values);
 
