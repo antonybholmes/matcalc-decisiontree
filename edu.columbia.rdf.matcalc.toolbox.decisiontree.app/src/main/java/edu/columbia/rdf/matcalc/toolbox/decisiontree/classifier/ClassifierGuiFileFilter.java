@@ -31,33 +31,36 @@ import java.io.File;
 
 import org.jebtk.modern.io.GuiFileExtFilter;
 
-
 /**
  * The class EpsGuiFileFilter.
  */
 public class ClassifierGuiFileFilter extends GuiFileExtFilter {
-	
-	public ClassifierGuiFileFilter() {
-		super("clsx");
-	}
-	
-	/* (non-Javadoc)
-	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
-	 */
-	@Override
-	public final boolean accept(File f) {
-		if (f.isDirectory()) {
-            return true;
-        }
 
-        return f.getName().toLowerCase().endsWith("clsx");
-	}
+  public ClassifierGuiFileFilter() {
+    super("clsx");
+  }
 
-	/* (non-Javadoc)
-	 * @see javax.swing.filechooser.FileFilter#getDescription()
-	 */
-	@Override
-	public final String getDescription() {
-		return "Classifiers (*.clsx)";
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
+   */
+  @Override
+  public final boolean accept(File f) {
+    if (f.isDirectory()) {
+      return true;
+    }
+
+    return f.getName().toLowerCase().endsWith("clsx");
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see javax.swing.filechooser.FileFilter#getDescription()
+   */
+  @Override
+  public final String getDescription() {
+    return "Classifiers (*.clsx)";
+  }
 }

@@ -22,88 +22,83 @@ import edu.columbia.rdf.matcalc.GroupPanel;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.MatrixRowAnnotationCombo;
 
-
 public class AddClassifierDialog extends ModernDialogTaskWindow {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private ModernTextField mTextName = new ModernClipboardTextField();
+  private ModernTextField mTextName = new ModernClipboardTextField();
 
+  private XYSeriesGroup mGroups;
 
-	private XYSeriesGroup mGroups;
+  private GroupPanel mGroupPanel;
 
-	private GroupPanel mGroupPanel;
+  private MatrixRowAnnotationCombo mHeaderCombo;
 
-	private MatrixRowAnnotationCombo mHeaderCombo;
+  private DataFrame mM;
 
-	private DataFrame mM;
+  public AddClassifierDialog(MainMatCalcWindow parent, DataFrame m) {
+    super(parent);
 
+    mM = m;
 
-	public AddClassifierDialog(MainMatCalcWindow parent, DataFrame m) {
-		super(parent);
+    setTitle("Classifier");
 
-		mM = m;
-		
-		setTitle("Classifier");
-		
-		mGroups = parent.getGroups();
+    mGroups = parent.getGroups();
 
-		setup();
+    setup();
 
-		createUi();
-	}
+    createUi();
+  }
 
-	private void setup() {
-		addWindowListener(new WindowWidgetFocusEvents(mOkButton));
+  private void setup() {
+    addWindowListener(new WindowWidgetFocusEvents(mOkButton));
 
-		setSize(600, 300);
+    setSize(600, 300);
 
-		UI.centerWindowToScreen(this);
-	}
+    UI.centerWindowToScreen(this);
+  }
 
-	private final void createUi() {
-		Box box = VBox.create();
+  private final void createUi() {
+    Box box = VBox.create();
 
-		box.add(new HBox(new ModernAutoSizeLabel("Name", 100), 
-				new ModernTextBorderPanel(mTextName, 300)));
-		
-		
-		box.add(UI.createVGap(20));
-		mGroupPanel = new GroupPanel(mGroups);
-		box.add(new HBox(new ModernAutoSizeLabel("Groups", 100), mGroupPanel));
-	
-		box.add(UI.createVGap(20));
-		mHeaderCombo = new MatrixRowAnnotationCombo(mM);
-		box.add(new HBox(new ModernAutoSizeLabel("Annotation", 100), mHeaderCombo));
-	
-		setCardContent(box);
-	}
+    box.add(new HBox(new ModernAutoSizeLabel("Name", 100), new ModernTextBorderPanel(mTextName, 300)));
 
-	@Override
-	public final void clicked(ModernClickEvent e) {
-		if (e.getMessage().equals(UI.BUTTON_OK)) {
-			if (TextUtils.isNullOrEmpty(mTextName.getText())) {
-				ModernMessageDialog.createWarningDialog(mParent, "The classifier must have a name.");
-				
-				return;
-			}
-		}
-		
-		super.clicked(e);
-	}
+    box.add(UI.createVGap(20));
+    mGroupPanel = new GroupPanel(mGroups);
+    box.add(new HBox(new ModernAutoSizeLabel("Groups", 100), mGroupPanel));
 
-	public XYSeries getGroup1() {
-		return mGroupPanel.getGroup1();
-	}
-	
-	public XYSeries getGroup2() {
-		return mGroupPanel.getGroup2();
-	}
+    box.add(UI.createVGap(20));
+    mHeaderCombo = new MatrixRowAnnotationCombo(mM);
+    box.add(new HBox(new ModernAutoSizeLabel("Annotation", 100), mHeaderCombo));
 
-	public String getClassifierName() {
-		return mTextName.getText();
-	}
-	
-	public String getAnnotation() {
-		return mHeaderCombo.getText();
-	}
+    setCardContent(box);
+  }
+
+  @Override
+  public final void clicked(ModernClickEvent e) {
+    if (e.getMessage().equals(UI.BUTTON_OK)) {
+      if (TextUtils.isNullOrEmpty(mTextName.getText())) {
+        ModernMessageDialog.createWarningDialog(mParent, "The classifier must have a name.");
+
+        return;
+      }
+    }
+
+    super.clicked(e);
+  }
+
+  public XYSeries getGroup1() {
+    return mGroupPanel.getGroup1();
+  }
+
+  public XYSeries getGroup2() {
+    return mGroupPanel.getGroup2();
+  }
+
+  public String getClassifierName() {
+    return mTextName.getText();
+  }
+
+  public String getAnnotation() {
+    return mHeaderCombo.getText();
+  }
 }

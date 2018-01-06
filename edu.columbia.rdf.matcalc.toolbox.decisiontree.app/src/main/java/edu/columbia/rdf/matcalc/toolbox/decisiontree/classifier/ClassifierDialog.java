@@ -47,208 +47,200 @@ import edu.columbia.rdf.matcalc.GroupsCombo;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.plot.heatmap.cluster.ClusterDistanceMetricCombo;
 
-
 public class ClassifierDialog extends ModernDialogTaskWindow implements ModernClickListener {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private ModernButton mLoadButton = 
-			new ModernButton(UI.BUTTON_IMPORT, UIService.getInstance().loadIcon(FolderVectorIcon.class, 16));
-	
-	private ModernButton mExportButton = 
-			new ModernButton(UI.BUTTON_EXPORT, UIService.getInstance().loadIcon(SaveVectorIcon.class, 16));
-	
-	private ModernButton mClearButton = 
-			new ModernButton(UI.MENU_CLEAR, UIService.getInstance().loadIcon("delete", 16));
+  private ModernButton mLoadButton = new ModernButton(UI.BUTTON_IMPORT,
+      UIService.getInstance().loadIcon(FolderVectorIcon.class, 16));
 
-	private ClusterDistanceMetricCombo mDistanceCombo = 
-			new ClusterDistanceMetricCombo();
+  private ModernButton mExportButton = new ModernButton(UI.BUTTON_EXPORT,
+      UIService.getInstance().loadIcon(SaveVectorIcon.class, 16));
 
-	private XYSeriesGroup mGroups;
+  private ModernButton mClearButton = new ModernButton(UI.MENU_CLEAR, UIService.getInstance().loadIcon("delete", 16));
 
-	private GroupsCombo mGroupCombo;
+  private ClusterDistanceMetricCombo mDistanceCombo = new ClusterDistanceMetricCombo();
 
-	private ModernCompactSpinner mPermField = 
-			new ModernCompactSpinner(1, 100000, 10000);
+  private XYSeriesGroup mGroups;
 
-	private ClassifierTable mClassifierTable;
+  private GroupsCombo mGroupCombo;
 
+  private ModernCompactSpinner mPermField = new ModernCompactSpinner(1, 100000, 10000);
 
-	public ClassifierDialog(MainMatCalcWindow parent) {
-		super(parent);
+  private ClassifierTable mClassifierTable;
 
-		setTitle("Classify");
-		
-		mGroups = parent.getGroups();
-		
-		//mClassifierCombo = new ClassifierCombo();
-		mClassifierTable = new ClassifierTable();
-		
-		mGroupCombo = new GroupsCombo(mGroups);
-		
-		setup();
+  public ClassifierDialog(MainMatCalcWindow parent) {
+    super(parent);
 
-		createUi();
-	}
+    setTitle("Classify");
 
-	private void setup() {
-		addWindowListener(new WindowWidgetFocusEvents(mOkButton));
+    mGroups = parent.getGroups();
 
-		mLoadButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				try {
-					open();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				} catch (SAXException e1) {
-					e1.printStackTrace();
-				} catch (ParserConfigurationException e1) {
-					e1.printStackTrace();
-				}
-			}});
-		
-		mExportButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				try {
-					save();
-				} catch (TransformerException | ParserConfigurationException e1) {
-					e1.printStackTrace();
-				}
-			}});
-		
-		mClearButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				clear();
-			}});
+    // mClassifierCombo = new ClassifierCombo();
+    mClassifierTable = new ClassifierTable();
 
-		setSize(600, 540);
+    mGroupCombo = new GroupsCombo(mGroups);
 
-		UI.centerWindowToScreen(this);
-	}
+    setup();
 
+    createUi();
+  }
 
+  private void setup() {
+    addWindowListener(new WindowWidgetFocusEvents(mOkButton));
 
-	private final void createUi() {
-		Box box = VBox.create();
+    mLoadButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        try {
+          open();
+        } catch (IOException e1) {
+          e1.printStackTrace();
+        } catch (SAXException e1) {
+          e1.printStackTrace();
+        } catch (ParserConfigurationException e1) {
+          e1.printStackTrace();
+        }
+      }
+    });
 
-		//Box box2 = HBox.create();
-		//box2.add(new ModernLabel("Classifier", 100));
-		//box2.add(mClassifierCombo);
-		//box.add(box2);
-		//box.add(Ui.createVGap(10));
-		
-		sectionHeader("Classifiers", box);
-		
-		
-		Box box2 = new HSpacedBox();
-		box2.add(mLoadButton);
-		box2.add(mExportButton);
-		box2.add(mClearButton);
-		box.add(box2);
-		box.add(UI.createVGap(10));
-		
+    mExportButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        try {
+          save();
+        } catch (TransformerException | ParserConfigurationException e1) {
+          e1.printStackTrace();
+        }
+      }
+    });
 
-		ModernScrollPane scrollPane = new ModernScrollPane(mClassifierTable)
-				.setScrollBarPolicy(ScrollBarPolicy.NEVER, ScrollBarPolicy.AUTO);
-		
-		box.add(new ModernContentPanel(scrollPane, 500, 200));
-		
+    mClearButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        clear();
+      }
+    });
 
-		midSectionHeader("Statistics", box);
-		
-		box.add(new HBox(new ModernLabel("Permutations", 150), mPermField));
-		
-		box.add(UI.createVGap(5));
-		box.add(new HBox(new ModernLabel("Distance metric", 150), mDistanceCombo));
-		
-		setDialogCardContent(box);
-		
-		mDistanceCombo.setSelectedIndex(3);
-	}
+    setSize(600, 540);
 
-	//public XYSeries getGroup1() {
-	//	return mGroups.get(group1Combo.getSelectedIndex());
-	//}
+    UI.centerWindowToScreen(this);
+  }
 
-	public List<DecisionTree> getClassifiers() {
-		List<DecisionTree> ret = new ArrayList<DecisionTree>();
-		
-		for (int i = 0; i < mClassifierTable.getRowCount(); ++i) {
-			if (mClassifierTable.getIsSelected(i)) {
-				ret.add(ClassifierService.getInstance().get(mClassifierTable.getValueAt(i, 1).toString()));
-			}
-		}
-		
-		return CollectionUtils.sort(ret);
-	}
-	
-	public XYSeries getGroup() {
-		return mGroups.get(mGroupCombo.getSelectedIndex());
-	}
-	
-	public int getPermutations() {
-		return mPermField.getIntValue();
-	}
-	
-	public DistanceMetric getDistanceMetric() {
-		return mDistanceCombo.getDistanceMetric();
-	}
-	
-	private void open() throws IOException, SAXException, ParserConfigurationException {
-		Path file = FileDialog.open(mParent)
-				.filter(new ClassifierGuiFileFilter())
-				.getFile(RecentFilesService.getInstance().getPwd());
-		
-		open(FileUtils.newBufferedInputStream(file));
-		
-		//mClassifierCombo.refresh();
-		mClassifierTable.refresh();
-	}
-	
-	private static void open(InputStream is) throws SAXException, IOException, ParserConfigurationException {
-		SAXParserFactory factory = SAXParserFactory.newInstance();
-		SAXParser saxParser = factory.newSAXParser();
+  private final void createUi() {
+    Box box = VBox.create();
 
-		ClassifierXmlHandler handler = new ClassifierXmlHandler();
+    // Box box2 = HBox.create();
+    // box2.add(new ModernLabel("Classifier", 100));
+    // box2.add(mClassifierCombo);
+    // box.add(box2);
+    // box.add(Ui.createVGap(10));
 
-		saxParser.parse(is, handler);	
-	}
-	
-	private void save() throws TransformerException, ParserConfigurationException {
-		Path file = FileDialog.save(mParent)
-				.filter(new ClassifierGuiFileFilter())
-				.getFile(RecentFilesService.getInstance().getPwd());
-		
-		if (FileUtils.exists(file)) {
-			ModernDialogStatus status = ModernMessageDialog.createFileReplaceDialog(mParent, file);
-			
-			if (status == ModernDialogStatus.CANCEL) {
-				return;
-			}
-		}
-		
-		save(file);
-		
-		ModernMessageDialog.createFileSavedDialog(mParent, file);
-	}
-	
-	private final void save(Path file) throws TransformerException, ParserConfigurationException {
-		Document doc = XmlUtils.createDoc();
+    sectionHeader("Classifiers", box);
 
-		doc.appendChild(ClassifierService.getInstance().toXml(doc));
+    Box box2 = new HSpacedBox();
+    box2.add(mLoadButton);
+    box2.add(mExportButton);
+    box2.add(mClearButton);
+    box.add(box2);
+    box.add(UI.createVGap(10));
 
-		XmlUtils.writeXml(doc, file);
+    ModernScrollPane scrollPane = new ModernScrollPane(mClassifierTable).setScrollBarPolicy(ScrollBarPolicy.NEVER,
+        ScrollBarPolicy.AUTO);
 
-		//LOG.info("Wrote settings to {}", Path.getAbsoluteFile());
-	}
-	
-	private void clear() {
-		ClassifierService.getInstance().clear();
-	}
+    box.add(new ModernContentPanel(scrollPane, 500, 200));
 
-	public DecisionTree getDecisionTree() {
-		return ClassifierService.getInstance().get((String)mClassifierTable.getValueAt(mClassifierTable.getSelectedRow(), 1));
-	}
+    midSectionHeader("Statistics", box);
+
+    box.add(new HBox(new ModernLabel("Permutations", 150), mPermField));
+
+    box.add(UI.createVGap(5));
+    box.add(new HBox(new ModernLabel("Distance metric", 150), mDistanceCombo));
+
+    setDialogCardContent(box);
+
+    mDistanceCombo.setSelectedIndex(3);
+  }
+
+  // public XYSeries getGroup1() {
+  // return mGroups.get(group1Combo.getSelectedIndex());
+  // }
+
+  public List<DecisionTree> getClassifiers() {
+    List<DecisionTree> ret = new ArrayList<DecisionTree>();
+
+    for (int i = 0; i < mClassifierTable.getRowCount(); ++i) {
+      if (mClassifierTable.getIsSelected(i)) {
+        ret.add(ClassifierService.getInstance().get(mClassifierTable.getValueAt(i, 1).toString()));
+      }
+    }
+
+    return CollectionUtils.sort(ret);
+  }
+
+  public XYSeries getGroup() {
+    return mGroups.get(mGroupCombo.getSelectedIndex());
+  }
+
+  public int getPermutations() {
+    return mPermField.getIntValue();
+  }
+
+  public DistanceMetric getDistanceMetric() {
+    return mDistanceCombo.getDistanceMetric();
+  }
+
+  private void open() throws IOException, SAXException, ParserConfigurationException {
+    Path file = FileDialog.open(mParent).filter(new ClassifierGuiFileFilter())
+        .getFile(RecentFilesService.getInstance().getPwd());
+
+    open(FileUtils.newBufferedInputStream(file));
+
+    // mClassifierCombo.refresh();
+    mClassifierTable.refresh();
+  }
+
+  private static void open(InputStream is) throws SAXException, IOException, ParserConfigurationException {
+    SAXParserFactory factory = SAXParserFactory.newInstance();
+    SAXParser saxParser = factory.newSAXParser();
+
+    ClassifierXmlHandler handler = new ClassifierXmlHandler();
+
+    saxParser.parse(is, handler);
+  }
+
+  private void save() throws TransformerException, ParserConfigurationException {
+    Path file = FileDialog.save(mParent).filter(new ClassifierGuiFileFilter())
+        .getFile(RecentFilesService.getInstance().getPwd());
+
+    if (FileUtils.exists(file)) {
+      ModernDialogStatus status = ModernMessageDialog.createFileReplaceDialog(mParent, file);
+
+      if (status == ModernDialogStatus.CANCEL) {
+        return;
+      }
+    }
+
+    save(file);
+
+    ModernMessageDialog.createFileSavedDialog(mParent, file);
+  }
+
+  private final void save(Path file) throws TransformerException, ParserConfigurationException {
+    Document doc = XmlUtils.createDoc();
+
+    doc.appendChild(ClassifierService.getInstance().toXml(doc));
+
+    XmlUtils.writeXml(doc, file);
+
+    // LOG.info("Wrote settings to {}", Path.getAbsoluteFile());
+  }
+
+  private void clear() {
+    ClassifierService.getInstance().clear();
+  }
+
+  public DecisionTree getDecisionTree() {
+    return ClassifierService.getInstance()
+        .get((String) mClassifierTable.getValueAt(mClassifierTable.getSelectedRow(), 1));
+  }
 }

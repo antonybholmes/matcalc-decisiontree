@@ -12,98 +12,95 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ClassifierXmlHandler extends DefaultHandler {
-	private String mName;
-	private String mPhenotype;
-	private String mControl;
-	private int mPhenSize;
-	private int mControlSize;
-	private int mSize;
-	private DataFrame mControlM;
-	private DataFrame mPhenM;
-	private String mGene;
-	private List<String> mGenes = new ArrayList<String>();
-	private boolean mPhenMode;
-	private boolean mControlMode;
+  private String mName;
+  private String mPhenotype;
+  private String mControl;
+  private int mPhenSize;
+  private int mControlSize;
+  private int mSize;
+  private DataFrame mControlM;
+  private DataFrame mPhenM;
+  private String mGene;
+  private List<String> mGenes = new ArrayList<String>();
+  private boolean mPhenMode;
+  private boolean mControlMode;
 
-	private int mGeneIndex = -1;
-	private int mColumnIndex = 0;
+  private int mGeneIndex = -1;
+  private int mColumnIndex = 0;
 
-	@Override
-	public void startElement(String uri, 
-			String localName,
-			String qName, 
-			Attributes attributes) throws SAXException {
+  @Override
+  public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
-		if (qName.equals("classifier")) {
-			mName = attributes.getValue("name");
-			mPhenotype = attributes.getValue("phenotype");
-			mGeneIndex = -1;
-			
-			System.err.println("classifier " + mName);
-			
-			try {
-				mPhenSize = Parser.toInt(attributes.getValue("phenotype-size"));
-			} catch (ParseException e2) {
-				e2.printStackTrace();
-			}
+    if (qName.equals("classifier")) {
+      mName = attributes.getValue("name");
+      mPhenotype = attributes.getValue("phenotype");
+      mGeneIndex = -1;
 
-			mControl = attributes.getValue("control");
+      System.err.println("classifier " + mName);
 
-			try {
-				mControlSize = Parser.toInt(attributes.getValue("control-size"));
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
-			try {
-				mSize = Parser.toInt(attributes.getValue("size"));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+      try {
+        mPhenSize = Parser.toInt(attributes.getValue("phenotype-size"));
+      } catch (ParseException e2) {
+        e2.printStackTrace();
+      }
 
-			mPhenM = DataFrame.createNumericalMatrix(mSize, mPhenSize);
-			mControlM = DataFrame.createNumericalMatrix(mSize, mControlSize);
-			mGenes = new ArrayList<String>();
-		} else if (qName.equals("gene")) {
-			mGene = attributes.getValue("name");
+      mControl = attributes.getValue("control");
 
-			mGenes.add(mGene);
+      try {
+        mControlSize = Parser.toInt(attributes.getValue("control-size"));
+      } catch (ParseException e1) {
+        e1.printStackTrace();
+      }
+      try {
+        mSize = Parser.toInt(attributes.getValue("size"));
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
 
-			++mGeneIndex;
-		} else if (qName.equals("phenotype")) {
-			mPhenMode = true;
-			mColumnIndex = 0;
-		} else if (qName.equals("control")) {
-			mControlMode = true;
-			mColumnIndex = 0;
-		} else if (qName.equals("sample")) {
-			try {
-				double v = Parser.toDouble(attributes.getValue("value"));
+      mPhenM = DataFrame.createNumericalMatrix(mSize, mPhenSize);
+      mControlM = DataFrame.createNumericalMatrix(mSize, mControlSize);
+      mGenes = new ArrayList<String>();
+    } else if (qName.equals("gene")) {
+      mGene = attributes.getValue("name");
 
-				if (mPhenMode) {
-					mPhenM.set(mGeneIndex, mColumnIndex++, v);
-				}
+      mGenes.add(mGene);
 
-				if (mControlMode) {
-					mControlM.set(mGeneIndex, mColumnIndex++, v);
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		} else {
-			// Do nothing
-		}
-	}
+      ++mGeneIndex;
+    } else if (qName.equals("phenotype")) {
+      mPhenMode = true;
+      mColumnIndex = 0;
+    } else if (qName.equals("control")) {
+      mControlMode = true;
+      mColumnIndex = 0;
+    } else if (qName.equals("sample")) {
+      try {
+        double v = Parser.toDouble(attributes.getValue("value"));
 
-	@Override
-	public void endElement(String uri, String localName, String qName) {
-		if (qName.equals("classifier")) {
-			//
-		} else if (qName.equals("phenotype")) {
-			mPhenMode = false;
-		} else if (qName.equals("control")) {
-			mControlMode = false;
-		} else {
-			// Do nothing
-		}
-	}
+        if (mPhenMode) {
+          mPhenM.set(mGeneIndex, mColumnIndex++, v);
+        }
+
+        if (mControlMode) {
+          mControlM.set(mGeneIndex, mColumnIndex++, v);
+        }
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+    } else {
+      // Do nothing
+    }
+  }
+
+  @Override
+  public void endElement(String uri, String localName, String qName) {
+    if (qName.equals("classifier")) {
+      //
+    } else if (qName.equals("phenotype")) {
+      mPhenMode = false;
+    } else if (qName.equals("control")) {
+      mControlMode = false;
+    } else {
+      // Do nothing
+    }
+  }
 }

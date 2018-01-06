@@ -1,7 +1,5 @@
 package edu.columbia.rdf.matcalc.toolbox.decisiontree.app;
 
-
-
 import java.awt.FontFormatException;
 import java.io.IOException;
 
@@ -18,22 +16,21 @@ import edu.columbia.rdf.matcalc.ModuleLoader;
 import edu.columbia.rdf.matcalc.bio.BioModuleLoader;
 import edu.columbia.rdf.matcalc.toolbox.decisiontree.DecisionTreeModule;
 
-
-
-
 public class MainDecisionTree {
-	//private static final Logger LOG = 
-	//		LoggerFactory.getLogger(MainSeqLogo.class);
-	
-	public static final void main(String[] args) throws FontFormatException, IOException, SAXException, ParserConfigurationException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-		AppService.getInstance().setAppInfo("decision_tree");
-		
-		ThemeService.getInstance().setTheme(ColorTheme.GREEN);
-		
-		ModuleLoader ml = new BioModuleLoader();
-		
-		ml.addModule(DecisionTreeModule.class);
-		
-		MainMatCalc.main(new DecisionTreeInfo(), ml);
-	}
+  // private static final Logger LOG =
+  // LoggerFactory.getLogger(MainSeqLogo.class);
+
+  public static final void main(String[] args)
+      throws FontFormatException, IOException, SAXException, ParserConfigurationException, ClassNotFoundException,
+      InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    AppService.getInstance().setAppInfo("decision_tree");
+
+    ThemeService.getInstance().setTheme(ColorTheme.GREEN);
+
+    ModuleLoader ml = new BioModuleLoader();
+
+    ml.addModule(DecisionTreeModule.class);
+
+    MainMatCalc.main(new DecisionTreeInfo(), ml);
+  }
 }

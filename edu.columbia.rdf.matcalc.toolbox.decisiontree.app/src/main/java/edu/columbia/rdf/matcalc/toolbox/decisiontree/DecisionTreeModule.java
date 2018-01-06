@@ -76,301 +76,282 @@ import edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier.ClassifierGuiFil
 import edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier.ClassifierService;
 import edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier.ConfidenceLayer;
 
-
 /**
- * Merges designated segments together using the merge column. Consecutive rows with the same
- * merge id will be merged together. Coordinates and copy number will be adjusted but
- * genes, cytobands etc are not.
+ * Merges designated segments together using the merge column. Consecutive rows
+ * with the same merge id will be merged together. Coordinates and copy number
+ * will be adjusted but genes, cytobands etc are not.
  *
  * @author Antony Holmes Holmes
  *
  */
 public class DecisionTreeModule extends CalcModule {
 
-	/**
-	 * The member convert button.
-	 */
-	private RibbonLargeButton mClassifyButton = new RibbonLargeButton("Decision Tree", 
-			UIService.getInstance().loadIcon(RunVectorIcon.class, 24));
-
-	private RibbonLargeButton mAddButton = new RibbonLargeButton("Add Decision Tree", 
-			UIService.getInstance().loadIcon(PlusVectorIcon.class, 24));
-
-	private final static Logger LOG = 
-			LoggerFactory.getLogger(DecisionTreeModule.class);
-
-
-	private static final int CLASSIFIER_PLOT_WIDTH = 100;
-
-	//private RibbonLargeButton2 mExportButton = new RibbonLargeButton2("Export", 
-	//		UIResources.getInstance().loadScalableIcon(SaveVectorIcon.class, 24));
-
-	/**
-	 * The member window.
-	 */
-	private MainMatCalcWindow mWindow;
-
-
-	/* (non-Javadoc)
-	 * @see org.abh.lib.NameProperty#getName()
-	 */
-	@Override
-	public String getName() {
-		return "Classifier";
-	}
+  /**
+   * The member convert button.
+   */
+  private RibbonLargeButton mClassifyButton = new RibbonLargeButton("Decision Tree",
+      UIService.getInstance().loadIcon(RunVectorIcon.class, 24));
+
+  private RibbonLargeButton mAddButton = new RibbonLargeButton("Add Decision Tree",
+      UIService.getInstance().loadIcon(PlusVectorIcon.class, 24));
 
-	/* (non-Javadoc)
-	 * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.matcalc.MainMatCalcWindow)
-	 */
-	@Override
-	public void init(MainMatCalcWindow window) {
-		mWindow = window;
+  private final static Logger LOG = LoggerFactory.getLogger(DecisionTreeModule.class);
 
-		// home
-		mWindow.getRibbon().getToolbar("Classification").getSection("Decision Tree").add(mClassifyButton);
-		mWindow.getRibbon().getToolbar("Classification").getSection("Decision Tree").add(mAddButton);
-		//mWindow.getRibbon().getToolbar("Statistics").getSection("Classifier").add(mExportButton);
+  private static final int CLASSIFIER_PLOT_WIDTH = 100;
 
-		mClassifyButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				classify();
-			}}
-				);
+  // private RibbonLargeButton2 mExportButton = new RibbonLargeButton2("Export",
+  // UIResources.getInstance().loadScalableIcon(SaveVectorIcon.class, 24));
 
-		mAddButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				addDecisionTree();
-			}}
-				);
+  /**
+   * The member window.
+   */
+  private MainMatCalcWindow mWindow;
 
-		/*
-		mExportButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				try {
-					export();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}}
-				);
-		 */
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.abh.lib.NameProperty#getName()
+   */
+  @Override
+  public String getName() {
+    return "Classifier";
+  }
 
-	private void classify() {
-		ClassifierDialog dialog = new ClassifierDialog(mWindow);
+  /*
+   * (non-Javadoc)
+   * 
+   * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
+   * matcalc.MainMatCalcWindow)
+   */
+  @Override
+  public void init(MainMatCalcWindow window) {
+    mWindow = window;
 
-		dialog.setVisible(true);
+    // home
+    mWindow.getRibbon().getToolbar("Classification").getSection("Decision Tree").add(mClassifyButton);
+    mWindow.getRibbon().getToolbar("Classification").getSection("Decision Tree").add(mAddButton);
+    // mWindow.getRibbon().getToolbar("Statistics").getSection("Classifier").add(mExportButton);
 
-		if (dialog.isCancelled()) {
-			return;
-		}
+    mClassifyButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        classify();
+      }
+    });
 
-		DataFrame m = mWindow.getCurrentMatrix();
+    mAddButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        addDecisionTree();
+      }
+    });
 
-		DecisionTree tree = dialog.getDecisionTree();
+    /*
+     * mExportButton.addClickListener(new ModernClickListener() {
+     * 
+     * @Override public void clicked(ModernClickEvent e) { try { export(); } catch
+     * (IOException e1) { e1.printStackTrace(); } }} );
+     */
+  }
 
-		double[] values;
-		
-		DataFrame resultsM = 
-				DataFrame.createNumericalMatrix(m.getCols(), 1);
+  private void classify() {
+    ClassifierDialog dialog = new ClassifierDialog(mWindow);
 
-		for (int queryColumn = 0; queryColumn < m.getCols(); ++queryColumn) {
-			// Score each sample in the query set
-			
-			values = m.columnToDoubleArray(queryColumn);
-			
-			String classification = tree.classify(values);
+    dialog.setVisible(true);
 
-			resultsM.setRowName(queryColumn, m.getColumnName(queryColumn));
-			resultsM.set(queryColumn, 0, classification);
-		}
+    if (dialog.isCancelled()) {
+      return;
+    }
 
-		mWindow.addToHistory("Run classifier", resultsM);
+    DataFrame m = mWindow.getCurrentMatrix();
 
-		//plot(m, mWindow.getGroups(), classifiers, resultsM, summaries);
-	}
+    DecisionTree tree = dialog.getDecisionTree();
 
-	private void plot(DataFrame m,
-			XYSeriesGroup groups,
-			List<Classifier> classifiers,
-			DataFrame resultsM,
-			List<DataFrame> summaries) {
+    double[] values;
 
-		// We need to create some series for each classifier
+    DataFrame resultsM = DataFrame.createNumericalMatrix(m.getCols(), 1);
 
-		Figure figure = Figure.createFigure();
+    for (int queryColumn = 0; queryColumn < m.getCols(); ++queryColumn) {
+      // Score each sample in the query set
 
-		// SubFigure to hold new plot
-		SubFigure subFigure = figure.newSubFigure();
+      values = m.columnToDoubleArray(queryColumn);
 
-		// We will use one set of axes for the whole plot
-		Axes axes = subFigure.newAxes();
+      String classification = tree.classify(values);
 
-		// We add multiple plots to the figure, one for each classifier
+      resultsM.setRowName(queryColumn, m.getColumnName(queryColumn));
+      resultsM.set(queryColumn, 0, classification);
+    }
 
-		double max = 0;
+    mWindow.addToHistory("Run classifier", resultsM);
 
-		for (int ci = 0; ci < classifiers.size(); ++ci) {
-			//Classifier classifier = classifiers.get(ci);
+    // plot(m, mWindow.getGroups(), classifiers, resultsM, summaries);
+  }
 
-			DataFrame summaryM = summaries.get(ci);
+  private void plot(DataFrame m, XYSeriesGroup groups, List<Classifier> classifiers, DataFrame resultsM,
+      List<DataFrame> summaries) {
 
-			//
-			// Summary
-			//
+    // We need to create some series for each classifier
 
-			Plot plot = axes.newPlot();
+    Figure figure = Figure.createFigure();
 
-			double confMin = summaryM.getValue(0, 4);
-			double confMax = summaryM.getValue(0, 5);
+    // SubFigure to hold new plot
+    SubFigure subFigure = figure.newSubFigure();
 
-			System.err.println("Conf " + confMin + " " + confMax);
+    // We will use one set of axes for the whole plot
+    Axes axes = subFigure.newAxes();
 
-			plot.addChild(new ConfidenceLayer(ci + 0.5, confMin, confMax));
+    // We add multiple plots to the figure, one for each classifier
 
+    double max = 0;
 
+    for (int ci = 0; ci < classifiers.size(); ++ci) {
+      // Classifier classifier = classifiers.get(ci);
 
-			plot = axes.newPlot();
-			plot.addChild(new BoxWhiskerScatterLayer2(ci + 0.5, 0.8));
+      DataFrame summaryM = summaries.get(ci);
 
-			// Plot for each group
+      //
+      // Summary
+      //
 
-			for (XYSeries g : groups) {
-				XYSeries series = new XYSeries(g.getName(), g.getColor());
+      Plot plot = axes.newPlot();
 
-				series.setMarker(ShapeStyle.CIRCLE);
-				series.getMarkerStyle().getLineStyle().setColor(g.getColor());
-				series.getMarkerStyle().getFillStyle().setColor(ColorUtils.getTransparentColor50(g.getColor()));
-				//series.getMarker().setSize(size);
+      double confMin = summaryM.getValue(0, 4);
+      double confMax = summaryM.getValue(0, 5);
 
-				List<Integer> indices = MatrixGroup.findColumnIndices(m, g);
+      System.err.println("Conf " + confMin + " " + confMax);
 
-				DataFrame cm = 
-						DataFrame.createNumericalMatrix(indices.size(), 1);
+      plot.addChild(new ConfidenceLayer(ci + 0.5, confMin, confMax));
 
-				for (int i = 0; i < indices.size(); ++i) {
-					double v = resultsM.getValue(indices.get(i), ci);
+      plot = axes.newPlot();
+      plot.addChild(new BoxWhiskerScatterLayer2(ci + 0.5, 0.8));
 
-					cm.set(i, 0, v);
+      // Plot for each group
 
-					max = Math.max(max, Math.abs(v));
-				}
+      for (XYSeries g : groups) {
+        XYSeries series = new XYSeries(g.getName(), g.getColor());
 
-				series.setMatrix(cm);
+        series.setMarker(ShapeStyle.CIRCLE);
+        series.getMarkerStyle().getLineStyle().setColor(g.getColor());
+        series.getMarkerStyle().getFillStyle().setColor(ColorUtils.getTransparentColor50(g.getColor()));
+        // series.getMarker().setSize(size);
 
-				plot.getAllSeries().add(series);	
-			}
-		}
+        List<Integer> indices = MatrixGroup.findColumnIndices(m, g);
 
+        DataFrame cm = DataFrame.createNumericalMatrix(indices.size(), 1);
 
+        for (int i = 0; i < indices.size(); ++i) {
+          double v = resultsM.getValue(indices.get(i), ci);
 
-		//
-		// The axis
-		//
+          cm.set(i, 0, v);
 
-		Axis axis = axes.getX1Axis();
+          max = Math.max(max, Math.abs(v));
+        }
 
-		axis.setLimits(0, classifiers.size(), 1);
-		axis.getTicks().setTicks(Linspace.evenlySpaced(0.5, classifiers.size() - 0.5, 1));
-		axis.getTicks().getMajorTicks().setRotation(-Mathematics.HALF_PI);
+        series.setMatrix(cm);
 
-		// Don't render the axis, instead use labels to indicate the
-		// phenotype and control
-		axis.setVisible(false);
-		axis.getTicks().getMajorTicks().getLineStyle().setVisible(false);
-		axis.getTicks().getMinorTicks().getLineStyle().setVisible(false);
-		axis.getLineStyle().setVisible(false);
-		axis.getTitle().setVisible(false);
+        plot.getAllSeries().add(series);
+      }
+    }
 
-		// The labels are the series names
+    //
+    // The axis
+    //
 
-		List<String> labels = new ArrayList<String>(classifiers.size());
+    Axis axis = axes.getX1Axis();
 
-		for (Classifier c : classifiers) {
-			labels.add(c.getName());
-		}
+    axis.setLimits(0, classifiers.size(), 1);
+    axis.getTicks().setTicks(Linspace.evenlySpaced(0.5, classifiers.size() - 0.5, 1));
+    axis.getTicks().getMajorTicks().setRotation(-Mathematics.HALF_PI);
 
-		axis.getTicks().getMajorTicks().setLabels(labels);
+    // Don't render the axis, instead use labels to indicate the
+    // phenotype and control
+    axis.setVisible(false);
+    axis.getTicks().getMajorTicks().getLineStyle().setVisible(false);
+    axis.getTicks().getMinorTicks().getLineStyle().setVisible(false);
+    axis.getLineStyle().setVisible(false);
+    axis.getTitle().setVisible(false);
 
-		//
-		// The y axis
-		//
+    // The labels are the series names
 
-		axis = axes.getY1Axis();
-		axis.setLimitsAutoRound(-max, max);
-		axis.setShowZerothLine(true);
-		axis.getTitle().setText("Classifier Score");
+    List<String> labels = new ArrayList<String>(classifiers.size());
 
-		// Add some classifier labels to indicate what the score means
+    for (Classifier c : classifiers) {
+      labels.add(c.getName());
+    }
 
-		// Get the graph max after adjustments
-		max = axis.getMax();
+    axis.getTicks().getMajorTicks().setLabels(labels);
 
-		for (int ci = 0; ci < classifiers.size(); ++ci) {
-			Classifier classifier = classifiers.get(ci);
+    //
+    // The y axis
+    //
 
-			Plot plot = axes.newPlot();
+    axis = axes.getY1Axis();
+    axis.setLimitsAutoRound(-max, max);
+    axis.setShowZerothLine(true);
+    axis.getTitle().setText("Classifier Score");
 
-			plot.addChild(new LabelPlotLayer(classifier.getPhenotypeName(), ci + 0.5, max, true, true, 0, -40));
-			plot.addChild(new LabelPlotLayer(classifier.getControlName(), ci + 0.5, -max, true, true, 0, 40));
-		}
+    // Add some classifier labels to indicate what the score means
 
+    // Get the graph max after adjustments
+    max = axis.getMax();
 
-		axes.setMargins(100);
-		//axes.setBottomMargin(PlotFactory.autoSetX1LabelMargin(axes));
+    for (int ci = 0; ci < classifiers.size(); ++ci) {
+      Classifier classifier = classifiers.get(ci);
 
-		axes.setInternalSize(classifiers.size() * CLASSIFIER_PLOT_WIDTH, 600);
+      Plot plot = axes.newPlot();
 
-		subFigure.setMargins(100);
+      plot.addChild(new LabelPlotLayer(classifier.getPhenotypeName(), ci + 0.5, max, true, true, 0, -40));
+      plot.addChild(new LabelPlotLayer(classifier.getControlName(), ci + 0.5, -max, true, true, 0, 40));
+    }
 
-		Graph2dWindow window = new Graph2dWindow(mWindow, figure, false);
+    axes.setMargins(100);
+    // axes.setBottomMargin(PlotFactory.autoSetX1LabelMargin(axes));
 
-		window.setVisible(true);
-	}
+    axes.setInternalSize(classifiers.size() * CLASSIFIER_PLOT_WIDTH, 600);
 
-	private void addDecisionTree() {
-		if (mWindow.getGroups().size() == 0) {
-			ModernMessageDialog.createWarningDialog(mWindow, 
-					"You must create some groups.");
+    subFigure.setMargins(100);
 
-			return;
-		}
+    Graph2dWindow window = new Graph2dWindow(mWindow, figure, false);
 
-		DataFrame m = mWindow.getCurrentMatrix();
+    window.setVisible(true);
+  }
 
-		AddClassifierDialog dialog = new AddClassifierDialog(mWindow, m);
+  private void addDecisionTree() {
+    if (mWindow.getGroups().size() == 0) {
+      ModernMessageDialog.createWarningDialog(mWindow, "You must create some groups.");
 
-		dialog.setVisible(true);
+      return;
+    }
 
-		if (dialog.isCancelled()) {
-			return;
-		}
+    DataFrame m = mWindow.getCurrentMatrix();
 
-		DecisionTree decisionTree = C45.parseDouble(m, mWindow.getGroups());
-		
-		ClassifierService.getInstance().add(decisionTree);
+    AddClassifierDialog dialog = new AddClassifierDialog(mWindow, m);
 
-		ModernMessageDialog.createInformationDialog(mWindow, 
-				"The classifier was created.");
-	}
+    dialog.setVisible(true);
 
-	private void export() throws TransformerException, ParserConfigurationException {
-		writeXml(FileDialog
-				.save(mWindow)
-				.filter(new ClassifierGuiFileFilter())
-				.getFile(RecentFilesService.getInstance().getPwd()));
-	}
+    if (dialog.isCancelled()) {
+      return;
+    }
 
-	public final void writeXml(Path file) throws TransformerException, ParserConfigurationException {
-		Document doc = XmlUtils.createDoc();
+    DecisionTree decisionTree = C45.parseDouble(m, mWindow.getGroups());
 
-		doc.appendChild(ClassifierService.getInstance().toXml(doc));
+    ClassifierService.getInstance().add(decisionTree);
 
-		XmlUtils.writeXml(doc, file);
+    ModernMessageDialog.createInformationDialog(mWindow, "The classifier was created.");
+  }
 
-		//LOG.info("Wrote settings to {}", Path.getAbsoluteFile());
-	}
+  private void export() throws TransformerException, ParserConfigurationException {
+    writeXml(FileDialog.save(mWindow).filter(new ClassifierGuiFileFilter())
+        .getFile(RecentFilesService.getInstance().getPwd()));
+  }
+
+  public final void writeXml(Path file) throws TransformerException, ParserConfigurationException {
+    Document doc = XmlUtils.createDoc();
+
+    doc.appendChild(ClassifierService.getInstance().toXml(doc));
+
+    XmlUtils.writeXml(doc, file);
+
+    // LOG.info("Wrote settings to {}", Path.getAbsoluteFile());
+  }
 }

@@ -40,61 +40,62 @@ import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.graphics.DrawingContext;
 
 /**
- * Concrete implementation of Graph2dCanvas for generating
- * scatter plots.
+ * Concrete implementation of Graph2dCanvas for generating scatter plots.
  *
  * @author Antony Holmes Holmes
  */
 public class ConfidenceLayer extends PlotClippedLayer {
 
-	/**
-	 * The constant serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+  /**
+   * The constant serialVersionUID.
+   */
+  private static final long serialVersionUID = 1L;
 
-	private double mMinY;
+  private double mMinY;
 
-	private double mMaxY;
+  private double mMaxY;
 
-	private double mX;
-	
-	private static final Color COLOR =
-			ColorUtils.decodeHtmlColor("#c0c0c080");
+  private double mX;
 
-	public ConfidenceLayer(double x, double minY, double maxY) {
-		super("Confidence");
+  private static final Color COLOR = ColorUtils.decodeHtmlColor("#c0c0c080");
 
-		mX = x;
-		mMinY = minY;
-		mMaxY = maxY;
-	}
+  public ConfidenceLayer(double x, double minY, double maxY) {
+    super("Confidence");
 
-	/* (non-Javadoc)
-	 * @see edu.columbia.rdf.lib.bioinformatics.plot.figure.PlotClippedLayer#plotLayer(java.awt.Graphics2D, org.abh.common.ui.ui.graphics.DrawingContext, edu.columbia.rdf.lib.bioinformatics.plot.figure.Figure, edu.columbia.rdf.lib.bioinformatics.plot.figure.Axes, edu.columbia.rdf.lib.bioinformatics.plot.figure.Plot, org.abh.lib.math.matrix.DataFrame)
-	 */
-	@Override
-	public void plotLayer(Graphics2D g2,
-			DrawingContext context,
-			Figure figure,
-			SubFigure subFigure,
-			Axes axes,
-			Plot plot, 
-			DataFrame m) {
+    mX = x;
+    mMinY = minY;
+    mMaxY = maxY;
+  }
 
-		// the width of the arms of the plot assuming each bar has a 
-		// nominal width of 1
-		int x1 = axes.toPlotX1(mX - 0.4);
-		int x2 = axes.toPlotX1(mX + 0.4);
-		
-		int w = x2 - x1 + 1;
-		
-		int y1 = axes.toPlotY1(mMaxY);
-		int h = axes.toPlotY1(mMinY) - y1  + 1;
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * edu.columbia.rdf.lib.bioinformatics.plot.figure.PlotClippedLayer#plotLayer(
+   * java.awt.Graphics2D, org.abh.common.ui.ui.graphics.DrawingContext,
+   * edu.columbia.rdf.lib.bioinformatics.plot.figure.Figure,
+   * edu.columbia.rdf.lib.bioinformatics.plot.figure.Axes,
+   * edu.columbia.rdf.lib.bioinformatics.plot.figure.Plot,
+   * org.abh.lib.math.matrix.DataFrame)
+   */
+  @Override
+  public void plotLayer(Graphics2D g2, DrawingContext context, Figure figure, SubFigure subFigure, Axes axes, Plot plot,
+      DataFrame m) {
 
-		g2.setColor(COLOR);
-		
-		System.err.println("rect " + x1 + " " + x2 + " " + y1 + " " + w + " " + h);
-		
-		g2.fillRect(x1, y1, w, h);
-	}
+    // the width of the arms of the plot assuming each bar has a
+    // nominal width of 1
+    int x1 = axes.toPlotX1(mX - 0.4);
+    int x2 = axes.toPlotX1(mX + 0.4);
+
+    int w = x2 - x1 + 1;
+
+    int y1 = axes.toPlotY1(mMaxY);
+    int h = axes.toPlotY1(mMinY) - y1 + 1;
+
+    g2.setColor(COLOR);
+
+    System.err.println("rect " + x1 + " " + x2 + " " + y1 + " " + w + " " + h);
+
+    g2.fillRect(x1, y1, w, h);
+  }
 }
