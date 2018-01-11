@@ -60,7 +60,8 @@ public class AddClassifierDialog extends ModernDialogTaskWindow {
   private final void createUi() {
     Box box = VBox.create();
 
-    box.add(new HBox(new ModernAutoSizeLabel("Name", 100), new ModernTextBorderPanel(mTextName, 300)));
+    box.add(new HBox(new ModernAutoSizeLabel("Name", 100),
+        new ModernTextBorderPanel(mTextName, 300)));
 
     box.add(UI.createVGap(20));
     mGroupPanel = new GroupPanel(mGroups);
@@ -77,7 +78,8 @@ public class AddClassifierDialog extends ModernDialogTaskWindow {
   public final void clicked(ModernClickEvent e) {
     if (e.getMessage().equals(UI.BUTTON_OK)) {
       if (TextUtils.isNullOrEmpty(mTextName.getText())) {
-        ModernMessageDialog.createWarningDialog(mParent, "The classifier must have a name.");
+        ModernMessageDialog.createWarningDialog(mParent,
+            "The classifier must have a name.");
 
         return;
       }

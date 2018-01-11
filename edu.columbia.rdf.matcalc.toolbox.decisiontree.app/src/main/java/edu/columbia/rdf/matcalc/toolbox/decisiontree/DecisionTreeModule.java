@@ -51,7 +51,6 @@ import org.jebtk.math.Linspace;
 import org.jebtk.math.machine.learning.C45;
 import org.jebtk.math.machine.learning.DecisionTree;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.matrix.MatrixGroup;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.dialog.ModernMessageDialog;
@@ -89,13 +88,16 @@ public class DecisionTreeModule extends CalcModule {
   /**
    * The member convert button.
    */
-  private RibbonLargeButton mClassifyButton = new RibbonLargeButton("Decision Tree",
+  private RibbonLargeButton mClassifyButton = new RibbonLargeButton(
+      "Decision Tree",
       UIService.getInstance().loadIcon(RunVectorIcon.class, 24));
 
-  private RibbonLargeButton mAddButton = new RibbonLargeButton("Add Decision Tree",
+  private RibbonLargeButton mAddButton = new RibbonLargeButton(
+      "Add Decision Tree",
       UIService.getInstance().loadIcon(PlusVectorIcon.class, 24));
 
-  private final static Logger LOG = LoggerFactory.getLogger(DecisionTreeModule.class);
+  private final static Logger LOG = LoggerFactory
+      .getLogger(DecisionTreeModule.class);
 
   private static final int CLASSIFIER_PLOT_WIDTH = 100;
 
@@ -120,7 +122,8 @@ public class DecisionTreeModule extends CalcModule {
   /*
    * (non-Javadoc)
    * 
-   * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
+   * @see
+   * edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
    * matcalc.MainMatCalcWindow)
    */
   @Override
@@ -128,8 +131,10 @@ public class DecisionTreeModule extends CalcModule {
     mWindow = window;
 
     // home
-    mWindow.getRibbon().getToolbar("Classification").getSection("Decision Tree").add(mClassifyButton);
-    mWindow.getRibbon().getToolbar("Classification").getSection("Decision Tree").add(mAddButton);
+    mWindow.getRibbon().getToolbar("Classification").getSection("Decision Tree")
+        .add(mClassifyButton);
+    mWindow.getRibbon().getToolbar("Classification").getSection("Decision Tree")
+        .add(mAddButton);
     // mWindow.getRibbon().getToolbar("Statistics").getSection("Classifier").add(mExportButton);
 
     mClassifyButton.addClickListener(new ModernClickListener() {
@@ -149,8 +154,8 @@ public class DecisionTreeModule extends CalcModule {
     /*
      * mExportButton.addClickListener(new ModernClickListener() {
      * 
-     * @Override public void clicked(ModernClickEvent e) { try { export(); } catch
-     * (IOException e1) { e1.printStackTrace(); } }} );
+     * @Override public void clicked(ModernClickEvent e) { try { export(); }
+     * catch (IOException e1) { e1.printStackTrace(); } }} );
      */
   }
 
@@ -187,7 +192,10 @@ public class DecisionTreeModule extends CalcModule {
     // plot(m, mWindow.getGroups(), classifiers, resultsM, summaries);
   }
 
-  private void plot(DataFrame m, XYSeriesGroup groups, List<Classifier> classifiers, DataFrame resultsM,
+  private void plot(DataFrame m,
+      XYSeriesGroup groups,
+      List<Classifier> classifiers,
+      DataFrame resultsM,
       List<DataFrame> summaries) {
 
     // We need to create some series for each classifier
@@ -232,7 +240,8 @@ public class DecisionTreeModule extends CalcModule {
 
         series.setMarker(ShapeStyle.CIRCLE);
         series.getMarkerStyle().getLineStyle().setColor(g.getColor());
-        series.getMarkerStyle().getFillStyle().setColor(ColorUtils.getTransparentColor50(g.getColor()));
+        series.getMarkerStyle().getFillStyle()
+            .setColor(ColorUtils.getTransparentColor50(g.getColor()));
         // series.getMarker().setSize(size);
 
         List<Integer> indices = MatrixGroup.findColumnIndices(m, g);
@@ -260,7 +269,8 @@ public class DecisionTreeModule extends CalcModule {
     Axis axis = axes.getX1Axis();
 
     axis.setLimits(0, classifiers.size(), 1);
-    axis.getTicks().setTicks(Linspace.evenlySpaced(0.5, classifiers.size() - 0.5, 1));
+    axis.getTicks()
+        .setTicks(Linspace.evenlySpaced(0.5, classifiers.size() - 0.5, 1));
     axis.getTicks().getMajorTicks().setRotation(-Mathematics.HALF_PI);
 
     // Don't render the axis, instead use labels to indicate the
@@ -300,8 +310,10 @@ public class DecisionTreeModule extends CalcModule {
 
       Plot plot = axes.newPlot();
 
-      plot.addChild(new LabelPlotLayer(classifier.getPhenotypeName(), ci + 0.5, max, true, true, 0, -40));
-      plot.addChild(new LabelPlotLayer(classifier.getControlName(), ci + 0.5, -max, true, true, 0, 40));
+      plot.addChild(new LabelPlotLayer(classifier.getPhenotypeName(), ci + 0.5,
+          max, true, true, 0, -40));
+      plot.addChild(new LabelPlotLayer(classifier.getControlName(), ci + 0.5,
+          -max, true, true, 0, 40));
     }
 
     axes.setMargins(100);
@@ -318,7 +330,8 @@ public class DecisionTreeModule extends CalcModule {
 
   private void addDecisionTree() {
     if (mWindow.getGroups().size() == 0) {
-      ModernMessageDialog.createWarningDialog(mWindow, "You must create some groups.");
+      ModernMessageDialog.createWarningDialog(mWindow,
+          "You must create some groups.");
 
       return;
     }
@@ -337,15 +350,18 @@ public class DecisionTreeModule extends CalcModule {
 
     ClassifierService.getInstance().add(decisionTree);
 
-    ModernMessageDialog.createInformationDialog(mWindow, "The classifier was created.");
+    ModernMessageDialog.createInformationDialog(mWindow,
+        "The classifier was created.");
   }
 
-  private void export() throws TransformerException, ParserConfigurationException {
+  private void export()
+      throws TransformerException, ParserConfigurationException {
     writeXml(FileDialog.save(mWindow).filter(new ClassifierGuiFileFilter())
         .getFile(RecentFilesService.getInstance().getPwd()));
   }
 
-  public final void writeXml(Path file) throws TransformerException, ParserConfigurationException {
+  public final void writeXml(Path file)
+      throws TransformerException, ParserConfigurationException {
     Document doc = XmlUtils.createDoc();
 
     doc.appendChild(ClassifierService.getInstance().toXml(doc));

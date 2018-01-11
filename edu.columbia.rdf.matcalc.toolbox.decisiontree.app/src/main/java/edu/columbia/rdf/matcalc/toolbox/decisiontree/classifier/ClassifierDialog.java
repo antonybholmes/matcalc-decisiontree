@@ -47,7 +47,8 @@ import edu.columbia.rdf.matcalc.GroupsCombo;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.plot.heatmap.cluster.ClusterDistanceMetricCombo;
 
-public class ClassifierDialog extends ModernDialogTaskWindow implements ModernClickListener {
+public class ClassifierDialog extends ModernDialogTaskWindow
+    implements ModernClickListener {
   private static final long serialVersionUID = 1L;
 
   private ModernButton mLoadButton = new ModernButton(UI.BUTTON_IMPORT,
@@ -56,7 +57,8 @@ public class ClassifierDialog extends ModernDialogTaskWindow implements ModernCl
   private ModernButton mExportButton = new ModernButton(UI.BUTTON_EXPORT,
       UIService.getInstance().loadIcon(SaveVectorIcon.class, 16));
 
-  private ModernButton mClearButton = new ModernButton(UI.MENU_CLEAR, UIService.getInstance().loadIcon("delete", 16));
+  private ModernButton mClearButton = new ModernButton(UI.MENU_CLEAR,
+      UIService.getInstance().loadIcon("delete", 16));
 
   private ClusterDistanceMetricCombo mDistanceCombo = new ClusterDistanceMetricCombo();
 
@@ -64,7 +66,8 @@ public class ClassifierDialog extends ModernDialogTaskWindow implements ModernCl
 
   private GroupsCombo mGroupCombo;
 
-  private ModernCompactSpinner mPermField = new ModernCompactSpinner(1, 100000, 10000);
+  private ModernCompactSpinner mPermField = new ModernCompactSpinner(1, 100000,
+      10000);
 
   private ClassifierTable mClassifierTable;
 
@@ -144,8 +147,8 @@ public class ClassifierDialog extends ModernDialogTaskWindow implements ModernCl
     box.add(box2);
     box.add(UI.createVGap(10));
 
-    ModernScrollPane scrollPane = new ModernScrollPane(mClassifierTable).setScrollBarPolicy(ScrollBarPolicy.NEVER,
-        ScrollBarPolicy.AUTO);
+    ModernScrollPane scrollPane = new ModernScrollPane(mClassifierTable)
+        .setScrollBarPolicy(ScrollBarPolicy.NEVER, ScrollBarPolicy.AUTO);
 
     box.add(new ModernContentPanel(scrollPane, 500, 200));
 
@@ -170,7 +173,8 @@ public class ClassifierDialog extends ModernDialogTaskWindow implements ModernCl
 
     for (int i = 0; i < mClassifierTable.getRowCount(); ++i) {
       if (mClassifierTable.getIsSelected(i)) {
-        ret.add(ClassifierService.getInstance().get(mClassifierTable.getValueAt(i, 1).toString()));
+        ret.add(ClassifierService.getInstance()
+            .get(mClassifierTable.getValueAt(i, 1).toString()));
       }
     }
 
@@ -189,7 +193,8 @@ public class ClassifierDialog extends ModernDialogTaskWindow implements ModernCl
     return mDistanceCombo.getDistanceMetric();
   }
 
-  private void open() throws IOException, SAXException, ParserConfigurationException {
+  private void open()
+      throws IOException, SAXException, ParserConfigurationException {
     Path file = FileDialog.open(mParent).filter(new ClassifierGuiFileFilter())
         .getFile(RecentFilesService.getInstance().getPwd());
 
@@ -199,7 +204,8 @@ public class ClassifierDialog extends ModernDialogTaskWindow implements ModernCl
     mClassifierTable.refresh();
   }
 
-  private static void open(InputStream is) throws SAXException, IOException, ParserConfigurationException {
+  private static void open(InputStream is)
+      throws SAXException, IOException, ParserConfigurationException {
     SAXParserFactory factory = SAXParserFactory.newInstance();
     SAXParser saxParser = factory.newSAXParser();
 
@@ -208,12 +214,14 @@ public class ClassifierDialog extends ModernDialogTaskWindow implements ModernCl
     saxParser.parse(is, handler);
   }
 
-  private void save() throws TransformerException, ParserConfigurationException {
+  private void save()
+      throws TransformerException, ParserConfigurationException {
     Path file = FileDialog.save(mParent).filter(new ClassifierGuiFileFilter())
         .getFile(RecentFilesService.getInstance().getPwd());
 
     if (FileUtils.exists(file)) {
-      ModernDialogStatus status = ModernMessageDialog.createFileReplaceDialog(mParent, file);
+      ModernDialogStatus status = ModernMessageDialog
+          .createFileReplaceDialog(mParent, file);
 
       if (status == ModernDialogStatus.CANCEL) {
         return;
@@ -225,7 +233,8 @@ public class ClassifierDialog extends ModernDialogTaskWindow implements ModernCl
     ModernMessageDialog.createFileSavedDialog(mParent, file);
   }
 
-  private final void save(Path file) throws TransformerException, ParserConfigurationException {
+  private final void save(Path file)
+      throws TransformerException, ParserConfigurationException {
     Document doc = XmlUtils.createDoc();
 
     doc.appendChild(ClassifierService.getInstance().toXml(doc));
@@ -240,7 +249,7 @@ public class ClassifierDialog extends ModernDialogTaskWindow implements ModernCl
   }
 
   public DecisionTree getDecisionTree() {
-    return ClassifierService.getInstance()
-        .get((String) mClassifierTable.getValueAt(mClassifierTable.getSelectedRow(), 1));
+    return ClassifierService.getInstance().get((String) mClassifierTable
+        .getValueAt(mClassifierTable.getSelectedRow(), 1));
   }
 }

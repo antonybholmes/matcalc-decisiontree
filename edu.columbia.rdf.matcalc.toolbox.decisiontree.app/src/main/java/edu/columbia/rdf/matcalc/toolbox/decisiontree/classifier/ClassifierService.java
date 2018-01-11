@@ -10,7 +10,8 @@ import org.jebtk.math.machine.learning.DecisionTree;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class ClassifierService extends ChangeListeners implements Iterable<String>, XmlRepresentation {
+public class ClassifierService extends ChangeListeners
+    implements Iterable<String>, XmlRepresentation {
   private static final long serialVersionUID = 1L;
 
   private static class ClassifierHelper {

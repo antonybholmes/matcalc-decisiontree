@@ -8,7 +8,8 @@ import org.jebtk.core.event.ChangeListener;
 import org.jebtk.modern.table.ModernSelectionTable;
 import org.jebtk.modern.table.ModernSelectionTableModel;
 
-public class ClassifierTable extends ModernSelectionTable implements ChangeListener {
+public class ClassifierTable extends ModernSelectionTable
+    implements ChangeListener {
 
   private static final long serialVersionUID = 1L;
 
@@ -26,7 +27,8 @@ public class ClassifierTable extends ModernSelectionTable implements ChangeListe
   }
 
   public void refresh() {
-    List<String> names = new ArrayList<String>(ClassifierService.getInstance().getCount());
+    List<String> names = new ArrayList<String>(
+        ClassifierService.getInstance().getCount());
 
     for (String c : ClassifierService.getInstance()) {
       names.add(c);

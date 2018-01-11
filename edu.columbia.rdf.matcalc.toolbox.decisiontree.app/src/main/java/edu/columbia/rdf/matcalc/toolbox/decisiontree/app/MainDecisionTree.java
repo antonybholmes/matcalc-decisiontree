@@ -20,9 +20,10 @@ public class MainDecisionTree {
   // private static final Logger LOG =
   // LoggerFactory.getLogger(MainSeqLogo.class);
 
-  public static final void main(String[] args)
-      throws FontFormatException, IOException, SAXException, ParserConfigurationException, ClassNotFoundException,
-      InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+  public static final void main(String[] args) throws FontFormatException,
+      IOException, SAXException, ParserConfigurationException,
+      ClassNotFoundException, InstantiationException, IllegalAccessException,
+      UnsupportedLookAndFeelException {
     AppService.getInstance().setAppInfo("decision_tree");
 
     ThemeService.getInstance().setTheme(ColorTheme.GREEN);

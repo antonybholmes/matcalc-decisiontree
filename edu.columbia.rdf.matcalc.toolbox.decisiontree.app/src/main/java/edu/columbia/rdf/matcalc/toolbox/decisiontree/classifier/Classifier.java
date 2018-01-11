@@ -9,13 +9,13 @@ import org.jebtk.core.collections.CollectionUtils;
 import org.jebtk.core.xml.XmlRepresentation;
 import org.jebtk.graphplot.figure.series.XYSeries;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.matrix.MatrixGroup;
 import org.jebtk.math.matrix.utils.MatrixOperations;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class Classifier implements Comparable<Classifier>, Iterable<String>, NameProperty, XmlRepresentation {
+public class Classifier implements Comparable<Classifier>, Iterable<String>,
+    NameProperty, XmlRepresentation {
   private String mName;
   private DataFrame mPhenM;
   private DataFrame mControlM;
@@ -24,23 +24,28 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
   private String mControl;
   private List<String> mGenes;
 
-  public Classifier(String name, DataFrame m, XYSeries phenotypeGroup, XYSeries controlGroup, String annotation) {
+  public Classifier(String name, DataFrame m, XYSeries phenotypeGroup,
+      XYSeries controlGroup, String annotation) {
     mName = name;
 
     mPhenotype = phenotypeGroup.getName();
     mControl = controlGroup.getName();
 
-    List<Integer> phenotypeIndices = MatrixGroup.findColumnIndices(m, phenotypeGroup);
+    List<Integer> phenotypeIndices = MatrixGroup.findColumnIndices(m,
+        phenotypeGroup);
 
-    List<Integer> controlIndices = MatrixGroup.findColumnIndices(m, controlGroup);
+    List<Integer> controlIndices = MatrixGroup.findColumnIndices(m,
+        controlGroup);
 
     mGenes = m.getRowAnnotationText(annotation);
 
     mGeneMap = CollectionUtils.toIndexMap(mGenes);
 
-    mPhenM = DataFrame.createNumericalMatrix(mGenes.size(), phenotypeIndices.size());
+    mPhenM = DataFrame.createNumericalMatrix(mGenes.size(),
+        phenotypeIndices.size());
 
-    mControlM = DataFrame.createNumericalMatrix(mGenes.size(), controlIndices.size());
+    mControlM = DataFrame.createNumericalMatrix(mGenes.size(),
+        controlIndices.size());
 
     int c = 0;
 
@@ -55,8 +60,8 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
     }
   }
 
-  public Classifier(String name, String phenotype, DataFrame phenM, String control, DataFrame controlM,
-      List<String> genes) {
+  public Classifier(String name, String phenotype, DataFrame phenM,
+      String control, DataFrame controlM, List<String> genes) {
     mName = name;
 
     mPhenotype = phenotype;
@@ -131,12 +136,19 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>, Nam
     return mName.hashCode();
   }
 
-  public static Classifier create(String name, DataFrame m, XYSeries phenotypeGroup, XYSeries controlGroup,
+  public static Classifier create(String name,
+      DataFrame m,
+      XYSeries phenotypeGroup,
+      XYSeries controlGroup,
       String annotation) {
     return new Classifier(name, m, phenotypeGroup, controlGroup, annotation);
   }
 
-  public static Classifier create(String name, String phenotype, DataFrame phenM, String control, DataFrame controlM,
+  public static Classifier create(String name,
+      String phenotype,
+      DataFrame phenM,
+      String control,
+      DataFrame controlM,
       List<String> genes) {
     return new Classifier(name, phenotype, phenM, control, controlM, genes);
   }

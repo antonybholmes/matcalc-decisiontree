@@ -79,7 +79,12 @@ public class ConfidenceLayer extends PlotClippedLayer {
    * org.abh.lib.math.matrix.DataFrame)
    */
   @Override
-  public void plotLayer(Graphics2D g2, DrawingContext context, Figure figure, SubFigure subFigure, Axes axes, Plot plot,
+  public void plotLayer(Graphics2D g2,
+      DrawingContext context,
+      Figure figure,
+      SubFigure subFigure,
+      Axes axes,
+      Plot plot,
       DataFrame m) {
 
     // the width of the arms of the plot assuming each bar has a

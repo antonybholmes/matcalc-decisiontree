@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.jebtk.core.text.Parser;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.math.matrix.DataFrame;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -29,7 +28,10 @@ public class ClassifierXmlHandler extends DefaultHandler {
   private int mColumnIndex = 0;
 
   @Override
-  public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+  public void startElement(String uri,
+      String localName,
+      String qName,
+      Attributes attributes) throws SAXException {
 
     if (qName.equals("classifier")) {
       mName = attributes.getValue("name");
