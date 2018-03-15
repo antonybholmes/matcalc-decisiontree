@@ -71,7 +71,7 @@ public class AddClassifierDialog extends ModernDialogTaskWindow {
     mHeaderCombo = new MatrixRowAnnotationCombo(mM);
     box.add(new HBox(new ModernAutoSizeLabel("Annotation", 100), mHeaderCombo));
 
-    setCardContent(box);
+    setCard(box);
   }
 
   @Override
