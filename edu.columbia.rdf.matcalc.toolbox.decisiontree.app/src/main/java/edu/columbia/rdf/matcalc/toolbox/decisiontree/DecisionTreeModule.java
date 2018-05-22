@@ -52,7 +52,7 @@ import org.jebtk.math.machine.learning.C45;
 import org.jebtk.math.machine.learning.DecisionTree;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.matrix.MatrixGroup;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.dialog.ModernMessageDialog;
 import org.jebtk.modern.event.ModernClickEvent;
 import org.jebtk.modern.event.ModernClickListener;
@@ -90,11 +90,11 @@ public class DecisionTreeModule extends CalcModule {
    */
   private RibbonLargeButton mClassifyButton = new RibbonLargeButton(
       "Decision Tree",
-      UIService.getInstance().loadIcon(RunVectorIcon.class, 24));
+      AssetService.getInstance().loadIcon(RunVectorIcon.class, 24));
 
   private RibbonLargeButton mAddButton = new RibbonLargeButton(
       "Add Decision Tree",
-      UIService.getInstance().loadIcon(PlusVectorIcon.class, 24));
+      AssetService.getInstance().loadIcon(PlusVectorIcon.class, 24));
 
   private final static Logger LOG = LoggerFactory
       .getLogger(DecisionTreeModule.class);

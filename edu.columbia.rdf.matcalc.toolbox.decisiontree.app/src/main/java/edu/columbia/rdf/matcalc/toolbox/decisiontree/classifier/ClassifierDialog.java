@@ -20,7 +20,7 @@ import org.jebtk.graphplot.figure.series.XYSeriesGroup;
 import org.jebtk.math.cluster.DistanceMetric;
 import org.jebtk.math.machine.learning.DecisionTree;
 import org.jebtk.modern.UI;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.button.ModernButton;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.dialog.ModernDialogTaskWindow;
@@ -52,13 +52,13 @@ public class ClassifierDialog extends ModernDialogTaskWindow
   private static final long serialVersionUID = 1L;
 
   private ModernButton mLoadButton = new ModernButton(UI.BUTTON_IMPORT,
-      UIService.getInstance().loadIcon(FolderVectorIcon.class, 16));
+      AssetService.getInstance().loadIcon(FolderVectorIcon.class, 16));
 
   private ModernButton mExportButton = new ModernButton(UI.BUTTON_EXPORT,
-      UIService.getInstance().loadIcon(SaveVectorIcon.class, 16));
+      AssetService.getInstance().loadIcon(SaveVectorIcon.class, 16));
 
   private ModernButton mClearButton = new ModernButton(UI.MENU_CLEAR,
-      UIService.getInstance().loadIcon("delete", 16));
+      AssetService.getInstance().loadIcon("delete", 16));
 
   private ClusterDistanceMetricCombo mDistanceCombo = new ClusterDistanceMetricCombo();
 
