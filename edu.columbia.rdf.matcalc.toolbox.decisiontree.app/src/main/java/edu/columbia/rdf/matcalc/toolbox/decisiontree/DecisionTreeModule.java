@@ -67,7 +67,7 @@ import org.w3c.dom.Document;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.figure.graph2d.Graph2dWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.Module;
 import edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier.AddClassifierDialog;
 import edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier.Classifier;
 import edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier.ClassifierDialog;
@@ -83,7 +83,7 @@ import edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier.ConfidenceLayer;
  * @author Antony Holmes Holmes
  *
  */
-public class DecisionTreeModule extends CalcModule {
+public class DecisionTreeModule extends Module {
 
   /**
    * The member convert button.
@@ -187,7 +187,7 @@ public class DecisionTreeModule extends CalcModule {
       resultsM.set(queryColumn, 0, classification);
     }
 
-    mWindow.addToHistory("Run classifier", resultsM);
+    mWindow.history().addToHistory("Run classifier", resultsM);
 
     // plot(m, mWindow.getGroups(), classifiers, resultsM, summaries);
   }
