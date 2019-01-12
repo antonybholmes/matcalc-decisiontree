@@ -80,7 +80,7 @@ import edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier.ConfidenceLayer;
  * with the same merge id will be merged together. Coordinates and copy number
  * will be adjusted but genes, cytobands etc are not.
  *
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class DecisionTreeModule extends Module {
@@ -179,7 +179,7 @@ public class DecisionTreeModule extends Module {
     for (int queryColumn = 0; queryColumn < m.getCols(); ++queryColumn) {
       // Score each sample in the query set
 
-      values = m.columnToDoubleArray(queryColumn);
+      values = m.columnToDouble(queryColumn);
 
       String classification = tree.classify(values);
 

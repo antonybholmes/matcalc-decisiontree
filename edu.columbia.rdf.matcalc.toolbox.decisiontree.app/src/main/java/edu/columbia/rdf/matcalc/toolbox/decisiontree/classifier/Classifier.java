@@ -1,6 +1,5 @@
 package edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,15 +13,14 @@ import org.jebtk.math.matrix.utils.MatrixOperations;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class Classifier implements Comparable<Classifier>, Iterable<String>,
-    NameProperty, XmlRepresentation {
+public class Classifier implements Comparable<Classifier>, NameProperty, XmlRepresentation {
   private String mName;
   private DataFrame mPhenM;
   private DataFrame mControlM;
   private Map<String, Integer> mGeneMap;
   private String mPhenotype;
   private String mControl;
-  private List<String> mGenes;
+  private String[] mGenes;
 
   public Classifier(String name, DataFrame m, XYSeries phenotypeGroup,
       XYSeries controlGroup, String annotation) {
@@ -37,14 +35,14 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>,
     List<Integer> controlIndices = MatrixGroup.findColumnIndices(m,
         controlGroup);
 
-    mGenes = m.getRowAnnotationText(annotation);
+    mGenes = m.getIndex().getText(annotation);
 
     mGeneMap = CollectionUtils.toIndexMap(mGenes);
 
-    mPhenM = DataFrame.createNumericalMatrix(mGenes.size(),
+    mPhenM = DataFrame.createNumericalMatrix(mGenes.length,
         phenotypeIndices.size());
 
-    mControlM = DataFrame.createNumericalMatrix(mGenes.size(),
+    mControlM = DataFrame.createNumericalMatrix(mGenes.length,
         controlIndices.size());
 
     int c = 0;
@@ -61,7 +59,7 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>,
   }
 
   public Classifier(String name, String phenotype, DataFrame phenM,
-      String control, DataFrame controlM, List<String> genes) {
+      String control, DataFrame controlM, String[] genes) {
     mName = name;
 
     mPhenotype = phenotype;
@@ -80,17 +78,12 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>,
     return mName;
   }
 
-  @Override
-  public Iterator<String> iterator() {
-    return mGenes.iterator();
-  }
-
   public int getGeneCount() {
-    return mGenes.size();
+    return mGenes.length;
   }
 
   public String getGene(int g) {
-    return mGenes.get(g);
+    return mGenes[g];
   }
 
   public double getPhenotypeMean(String gene) {
@@ -149,7 +142,7 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>,
       DataFrame phenM,
       String control,
       DataFrame controlM,
-      List<String> genes) {
+      String[] genes) {
     return new Classifier(name, phenotype, phenM, control, controlM, genes);
   }
 
@@ -161,7 +154,7 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>,
     e.setAttribute("phenotype-size", Integer.toString(mPhenM.getCols()));
     e.setAttribute("control", mControl);
     e.setAttribute("control-size", Integer.toString(mControlM.getCols()));
-    e.setAttribute("size", Integer.toString(mGenes.size()));
+    e.setAttribute("size", Integer.toString(mGenes.length));
 
     // XmlElement gse = new XmlElement("genes");
 
@@ -198,7 +191,7 @@ public class Classifier implements Comparable<Classifier>, Iterable<String>,
     return e;
   }
 
-  public List<String> getGenes() {
+  public String[] getGenes() {
     return mGenes;
   }
 }
