@@ -303,7 +303,7 @@ public class DecisionTreeModule extends Module {
     // Add some classifier labels to indicate what the score means
 
     // Get the graph max after adjustments
-    max = axis.getMax();
+    max = Axis.getLimits().getMax();
 
     for (int ci = 0; ci < classifiers.size(); ++ci) {
       Classifier classifier = classifiers.get(ci);
