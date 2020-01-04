@@ -1,8 +1,8 @@
 package edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier;
 
+import org.jebtk.modern.ModernWidget;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.combobox.ModernComboBox;
-import org.jebtk.modern.widget.ModernWidget;
 
 public class ClassifierCombo extends ModernComboBox {
   private static final long serialVersionUID = 1L;

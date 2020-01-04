@@ -3,7 +3,7 @@ package edu.columbia.rdf.matcalc.toolbox.decisiontree.classifier;
 import java.util.List;
 import java.util.Map;
 
-import org.jebtk.core.NameProperty;
+import org.jebtk.core.NameGetter;
 import org.jebtk.core.collections.CollectionUtils;
 import org.jebtk.core.xml.XmlRepresentation;
 import org.jebtk.graphplot.figure.series.XYSeries;
@@ -13,7 +13,7 @@ import org.jebtk.math.matrix.utils.MatrixOperations;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class Classifier implements Comparable<Classifier>, NameProperty, XmlRepresentation {
+public class Classifier implements Comparable<Classifier>, NameGetter, XmlRepresentation {
   private String mName;
   private DataFrame mPhenM;
   private DataFrame mControlM;
