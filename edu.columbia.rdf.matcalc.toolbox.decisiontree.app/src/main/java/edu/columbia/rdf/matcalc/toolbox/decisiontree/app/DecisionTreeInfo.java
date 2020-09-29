@@ -9,7 +9,6 @@ public class DecisionTreeInfo extends GuiAppInfo {
   public DecisionTreeInfo() {
     super("Decision Tree", new AppVersion(1),
         "Copyright (C) ${year} Antony Holmes",
-        AssetService.getInstance().loadIcon(DecisionTreeIcon.class, 32),
         AssetService.getInstance().loadIcon(DecisionTreeIcon.class, 128));
   }
 
